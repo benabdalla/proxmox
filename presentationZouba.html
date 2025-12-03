@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Présentation Nokia</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #1a1a2e;
+            overflow: hidden;
+        }
+
+        .presentation-container {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+        }
+
+        .slide {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            display: none;
+            padding: 60px;
+            background: linear-gradient(135deg, #124e87 0%, #1a5f9e 100%);
+            color: white;
+        }
+
+        .slide.active {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            animation: fadeIn 0.6s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Slide 1 - Titre */
+        .slide-1 {
+            background: linear-gradient(135deg, #0a3d62 0%, #124e87 100%);
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .slide-1 h1 {
+            font-size: 4.5em;
+            font-weight: bold;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+
+        .slide-1 .subtitle {
+            font-size: 1.8em;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+
+        .slide-1 .logo {
+            font-size: 6em;
+            margin-bottom: 20px;
+            opacity: 0.95;
+        }
+
+        /* Slide 2 - Contexte */
+        .slide-2 {
+            background: linear-gradient(135deg, #124e87 0%, #1a5f9e 100%);
+        }
+
+        .slide-title {
+            font-size: 3em;
+            margin-bottom: 40px;
+            border-left: 6px solid #00d4ff;
+            padding-left: 20px;
+            font-weight: bold;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .content-box {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .content-box h3 {
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            color: #00d4ff;
+        }
+
+        .info-item {
+            margin-bottom: 15px;
+            font-size: 1.1em;
+            line-height: 1.6;
+        }
+
+        .info-item strong {
+            color: #00d4ff;
+        }
+
+        .problem-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .problem-list li {
+            padding-left: 30px;
+            position: relative;
+            margin-bottom: 12px;
+            font-size: 1.1em;
+        }
+
+        .problem-list li:before {
+            content: "⚠";
+            position: absolute;
+            left: 0;
+            color: #ff6b6b;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.2) 0%, rgba(0, 170, 255, 0.2) 100%);
+            padding: 25px;
+            border-radius: 10px;
+            border-left: 4px solid #00d4ff;
+            font-size: 1.4em;
+            font-style: italic;
+            margin-top: 30px;
+        }
+
+        /* Slide 3 - Stratégies */
+        .slide-3 {
+            background: linear-gradient(135deg, #1a5f9e 0%, #2980b9 100%);
+        }
+
+        .strategy-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 40px;
+            margin-bottom: 30px;
+        }
+
+        .action-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .action-item {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 20px 25px;
+            border-radius: 12px;
+            border-left: 5px solid #4ecdc4;
+            font-size: 1.15em;
+            transition: transform 0.3s;
+        }
+
+        .action-item:hover {
+            transform: translateX(10px);
+        }
+
+        .leadership-box {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 15px;
+            border: 2px solid rgba(78, 205, 196, 0.5);
+        }
+
+        .leadership-box h3 {
+            color: #4ecdc4;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+        }
+
+        .leadership-box ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .leadership-box li {
+            padding-left: 25px;
+            position: relative;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+
+        .leadership-box li:before {
+            content: "👤";
+            position: absolute;
+            left: 0;
+        }
+
+        .quote {
+            background: rgba(78, 205, 196, 0.2);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            font-style: italic;
+            font-size: 1.05em;
+            border-left: 3px solid #4ecdc4;
+        }
+
+        /* Slide 4 - Résultats */
+        .slide-4 {
+            background: linear-gradient(135deg, #2980b9 0%, #3498db 100%);
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 35px;
+        }
+
+        .result-card {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 35px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .result-card h3 {
+            color: #a8e6cf;
+            font-size: 2em;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .result-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .result-list li {
+            padding-left: 35px;
+            position: relative;
+            margin-bottom: 18px;
+            font-size: 1.15em;
+            line-height: 1.5;
+        }
+
+        .result-list.success li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #a8e6cf;
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+
+        .result-list.lessons li:before {
+            content: "💡";
+            position: absolute;
+            left: 0;
+        }
+
+        /* Navigation */
+        .nav-controls {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            display: flex;
+            gap: 15px;
+            z-index: 1000;
+        }
+
+        .nav-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid white;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.3s;
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-btn:hover {
+            background: white;
+            color: #124e87;
+            transform: scale(1.05);
+        }
+
+        .slide-counter {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 10px 20px;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            font-size: 1em;
+        }
+    </style>
+</head>
+<body>
+    <div class="presentation-container">
+        <!-- Slide 0: Page de garde -->
+        <div class="slide slide-0 active" style="background: linear-gradient(135deg, #0a3d62 0%, #0f4c75 100%);">
+            <div style="display: flex; align-items: center; justify-content: center; gap: 80px;">
+                <div style="width: 300px; height: 300px; background: linear-gradient(135deg, #4dd4ac 0%, #45b7d1 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 20px 60px rgba(0,0,0,0.3);">
+                    <div style="font-size: 4em; color: white; font-weight: bold;">NOKIA</div>
+                </div>
+                <div>
+                    <h1 style="font-size: 3.5em; margin-bottom: 30px; line-height: 1.2;">Résilience d'une Entreprise<br>Étude de Cas : Nokia</h1>
+                    <div style="background: rgba(255,255,255,0.15); padding: 30px 40px; border-radius: 20px; border: 2px solid rgba(255,255,255,0.3); backdrop-filter: blur(10px); margin-top: 40px;">
+                        <div style="font-size: 1.8em; margin-bottom: 15px;"><strong>Par : Zeineb Ben Jeddou</strong></div>
+                        <div style="font-size: 1.5em; opacity: 0.9;">Décembre 2025</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 1: Contexte -->
+        <div class="slide slide-1">
+            <h2 class="slide-title">CONTEXTE DE L'ENTREPRISE</h2>
+            <div class="content-grid">
+                <div class="content-box">
+                    <h3>Brève Présentation</h3>
+                    <div class="info-item"><strong>Fondation :</strong> 1865, Finlande</div>
+                    <div class="info-item"><strong>Secteur :</strong> Télécommunications, technologie, réseaux</div>
+                    <div class="info-item" style="margin-top: 20px;">
+                        Nokia a longtemps été le leader mondial des téléphones mobiles dans les années 1990–2000.
+                    </div>
+                </div>
+                <div class="content-box">
+                    <h3>Problèmes Rencontrés</h3>
+                    <ul class="problem-list">
+                        <li>Perte massive de parts de marché à cause de la montée d'Apple et Android</li>
+                        <li>Retard dans l'innovation, notamment sur les smartphones</li>
+                        <li>Chute des ventes et de la valeur boursière</li>
+                        <li>Image de marque affaiblie</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="highlight-box">
+                Nokia a subi une chute rapide après avoir dominé le marché global du mobile.
+            </div>
+        </div>
+
+        <!-- Slide 2: Stratégies -->
+        <div class="slide slide-2">
+            <h2 class="slide-title">STRATÉGIES DE REDRESSEMENT</h2>
+            <div class="strategy-grid">
+                <div>
+                    <h3 style="color: #4ecdc4; font-size: 2em; margin-bottom: 25px;">Actions Mises en Place</h3>
+                    <div class="action-list">
+                        <div class="action-item">Abandon progressif de la fabrication de smartphones</div>
+                        <div class="action-item">Recentrage stratégique sur les infrastructures télécom et réseaux 4G/5G</div>
+                        <div class="action-item">Partenariat avec Microsoft puis revente de la division mobile</div>
+                        <div class="action-item">Réduction des coûts et réorganisation interne</div>
+                    </div>
+                </div>
+                <div class="leadership-box">
+                    <h3>Rôle du Leadership</h3>
+                    <ul>
+                        <li>Nouvelle direction avec une vision orientée "réseaux et innovation"</li>
+                        <li>Accélération des décisions stratégiques</li>
+                    </ul>
+                    <div class="quote">
+                        "Notre priorité est d'investir dans les technologies de demain."
+                        <div style="margin-top: 10px; font-size: 0.9em; opacity: 0.8;">— Direction Nokia</div>
+                    </div>
+                </div>
+            </div>
+            <div class="highlight-box">
+                Une stratégie centrée sur les réseaux et l'innovation a permis un retour à la stabilité.
+            </div>
+        </div>
+
+        <!-- Slide 3: Résultats -->
+        <div class="slide slide-3">
+            <h2 class="slide-title">RÉSULTATS & LEÇONS APPRISES</h2>
+            <div class="results-grid">
+                <div class="result-card">
+                    <h3><span>📈</span> Résultats</h3>
+                    <ul class="result-list success">
+                        <li>Nokia devient un acteur majeur dans les infrastructures 5G</li>
+                        <li>Retour à la croissance dans le secteur des réseaux</li>
+                        <li>Réputation améliorée grâce à son expertise technologique</li>
+                    </ul>
+                </div>
+                <div class="result-card">
+                    <h3><span>💡</span> Leçons Apprises</h3>
+                    <ul class="result-list lessons">
+                        <li>L'innovation continue est essentielle pour rester leader</li>
+                        <li>Une entreprise doit savoir changer de direction rapidement</li>
+                        <li>Le leadership joue un rôle clé dans la gestion de crise</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="highlight-box">
+                La résilience de Nokia montre l'importance de l'adaptation et du leadership stratégique.
+            </div>
+        </div>
+
+
+          <div class="slide slide-4">
+            <h1 class="slide-title">Merci pour votre attention</h1>
+           
+          
+        </div>
+
+    </div>
+
+    <div class="slide-counter">
+        <span id="current-slide">0</span> / 5
+    </div>
+
+    <div class="nav-controls">
+        <button class="nav-btn" id="prev-btn">← Précédent</button>
+        <button class="nav-btn" id="next-btn">Suivant →</button>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const totalSlides = 5;
+
+        function showSlide(n) {
+            const slides = document.querySelectorAll('.slide');
+            slides.forEach(slide => slide.classList.remove('active'));
+            
+            // Limiter currentSlide dans la plage valide
+            if (n > totalSlides) {
+                currentSlide = totalSlides;
+            } else if (n < 0) {
+                currentSlide = 0;
+            } else {
+                currentSlide = n;
+            }
+            
+            // Vérifier que l'élément existe avant d'ajouter la classe
+            const targetSlide = document.querySelector(`.slide-${currentSlide}`);
+            if (targetSlide) {
+                targetSlide.classList.add('active');
+            }
+            
+            const currentSlideElement = document.getElementById('current-slide');
+            if (currentSlideElement) {
+                currentSlideElement.textContent = currentSlide;
+            }
+            
+            // Désactiver les boutons aux limites
+            const prevBtn = document.getElementById('prev-btn');
+            const nextBtn = document.getElementById('next-btn');
+            if (prevBtn) prevBtn.disabled = currentSlide === 0;
+            if (nextBtn) nextBtn.disabled = currentSlide === totalSlides;
+        }
+
+        document.getElementById('next-btn').addEventListener('click', () => {
+            currentSlide++;
+            showSlide(currentSlide);
+        });
+
+        document.getElementById('prev-btn').addEventListener('click', () => {
+            currentSlide--;
+            showSlide(currentSlide);
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') {
+                currentSlide++;
+                showSlide(currentSlide);
+            } else if (e.key === 'ArrowLeft') {
+                currentSlide--;
+                showSlide(currentSlide);
+            }
+        });
+
+        showSlide(currentSlide);
+    </script>
+</body>
+</html>
