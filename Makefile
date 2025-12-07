@@ -1,4 +1,4 @@
-.PHONY: help install start test clean dev deploy status logs
+.PHONY: help install start test clean dev deploy status logs check-config
 
 # Variables
 PYTHON := python3
@@ -13,12 +13,23 @@ help: ## Afficher l'aide
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-15s\033[0m %s\n", $$1, $$2}'
 	@echo ""
 
+check-config: ## Vérifier la configuration Proxmox et templates
+	@echo "🔍 Vérification de la configuration..."
+	@if [ -f "check-proxmox-templates.sh" ]; then \
+		chmod +x check-proxmox-templates.sh; \
+		./check-proxmox-templates.sh; \
+	else \
+		echo "❌ Script de vérification non trouvé"; \
+	fi
+
 install: ## Installer les dépendances
 	@echo "📦 Installation des dépendances..."
 	@mkdir -p data logs terraform/workspaces terraform/states
 	@cd $(BACKEND) && $(PYTHON) -m venv venv
 	@. $(VENV)/bin/activate && $(PIP) install -r $(BACKEND)/requirements.txt
 	@echo "✅ Installation terminée"
+	@echo ""
+	@echo "⚙️  Prochaine étape: make check-config"
 
 start: ## Démarrer l'application
 	@echo "🚀 Démarrage de l'application..."

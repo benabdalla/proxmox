@@ -51,7 +51,7 @@ class TerraformService:
         else:
             template = self._get_lxc_template(deployment)
         
-        with open(os.path.join(workspace_dir, 'main.tf'), 'w') as f:
+        with open(os.path.join(workspace_dir, 'main.tf'), 'w', encoding='utf-8') as f:
             f.write(template)
     
     def _get_vm_template(self, deployment):
@@ -255,11 +255,16 @@ variable "ssh_public_key" {
 }
 '''
         
-        with open(os.path.join(workspace_dir, 'variables.tf'), 'w') as f:
+        with open(os.path.join(workspace_dir, 'variables.tf'), 'w', encoding='utf-8') as f:
             f.write(variables)
     
     def _generate_tfvars(self, workspace_dir, deployment):
         """Génère le fichier terraform.tfvars"""
+        
+        # Récupérer le nom du template depuis .env ou utiliser une valeur par défaut
+        template_name = os.getenv('TEMPLATE_NAME', 'ubuntu-22.04-template')
+        lxc_template = os.getenv('LXC_TEMPLATE', 'local:vztmpl/ubuntu-22.04-standard_22.04-1_amd64.tar.zst')
+        
         tfvars = f'''proxmox_api_url          = "{os.getenv('PROXMOX_API_URL')}"
 proxmox_api_token_id     = "{os.getenv('PROXMOX_API_TOKEN_ID')}"
 proxmox_api_token_secret = "{os.getenv('PROXMOX_API_TOKEN_SECRET')}"
@@ -270,9 +275,11 @@ memory_mb                = {deployment.memory}
 disk_gb                  = {deployment.disk}
 storage                  = "{os.getenv('PROXMOX_STORAGE', 'local-lvm')}"
 network_bridge           = "{os.getenv('PROXMOX_BRIDGE', 'vmbr0')}"
+template_name            = "{template_name}"
+lxc_template             = "{lxc_template}"
 '''
         
-        with open(os.path.join(workspace_dir, 'terraform.tfvars'), 'w') as f:
+        with open(os.path.join(workspace_dir, 'terraform.tfvars'), 'w', encoding='utf-8') as f:
             f.write(tfvars)
     
     def apply(self, workspace_dir):

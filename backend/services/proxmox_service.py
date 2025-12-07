@@ -12,7 +12,7 @@ class ProxmoxService:
     """Service pour interagir avec Proxmox"""
     
     def __init__(self):
-        self.api_url = os.getenv('PROXMOX_API_URL', '').replace('/api2/json', '')
+        self.api_url = os.getenv('PROXMOX_API_URL', '')
         self.token_id = os.getenv('PROXMOX_API_TOKEN_ID')
         self.token_secret = os.getenv('PROXMOX_API_TOKEN_SECRET')
         self.node = os.getenv('PROXMOX_NODE', 'pve')

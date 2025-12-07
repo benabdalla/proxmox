@@ -1,0 +1,192 @@
+ssh root@votre-proxmox-server
+
+# Télécharger Ubuntu 22.04
+cd /var/lib/vz/template/iso
+wget https://cloud-images.ubuntu.com/jammy/current/jammy-server-cloudimg-amd64.img
+
+# Créer template ID 9000
+qm create 9000 --name ubuntu-22.04-template --memory 2048 --cores 2 --net0 virtio,bridge=vmbr0
+qm importdisk 9000 jammy-server-cloudimg-amd64.img local-lvm
+qm set 9000 --scsihw virtio-scsi-pci --scsi0 local-lvm:vm-9000-disk-0
+qm set 9000 --ide2 local-lvm:cloudinit --boot c --bootdisk scsi0
+qm set 9000 --serial0 socket --vga serial0
+qm template 9000
+
+# Vérifier
+qm list | grep template╔══════════════════════════════════════════════════════════════╗
+║                                                              ║
+║       🚨 RÉSOLUTION DES ERREURS DE DÉPLOIEMENT 🚨            ║
+║                                                              ║
+║                   Plateforme PaaS Proxmox                    ║
+║                    7 Décembre 2025                           ║
+║                                                              ║
+╚══════════════════════════════════════════════════════════════╝
+
+
+📋 ERREURS IDENTIFIÉES
+══════════════════════════════════════════════════════════════
+
+  ❌ Erreur 1: Template Proxmox Manquant
+     Template 'ubuntu-22.04-template' not found
+
+  ❌ Erreur 2: Problème de Connectivité Terraform
+     Network connectivity issue reaching Terraform registry
+
+
+✅ SOLUTIONS CRÉÉES
+══════════════════════════════════════════════════════════════
+
+  📄 Documentation (4 fichiers)
+     ┣━ QUICK_FIX.md ........... Guide détaillé des solutions
+     ┣━ SOLUTIONS.md ........... Résumé rapide avec checklist
+     ┣━ ERROR_SUMMARY.md ....... Récapitulatif complet
+     ┗━ (Ce fichier) ........... Vue d'ensemble visuelle
+
+  🔧 Scripts Automatiques (2 fichiers)
+     ┣━ check-proxmox-templates.sh ... Linux/Mac
+     ┗━ check-proxmox-templates.ps1 .. Windows
+
+  ⚙️ Fichiers Modifiés (3)
+     ┣━ .env.example ................ Ajout TEMPLATE_NAME
+     ┣━ terraform_service.py ........ Support des templates
+     ┗━ Makefile .................... Commande check-config
+
+
+🎯 ACTIONS REQUISES
+══════════════════════════════════════════════════════════════
+
+  Étape 1: Créer le Template Proxmox
+  ┌────────────────────────────────────────────────────────┐
+  │ OPTION A: Script Automatique (Recommandé)             │
+  │                                                        │
+  │   Windows:  .\check-proxmox-templates.ps1             │
+  │   Linux:    ./check-proxmox-templates.sh              │
+  └────────────────────────────────────────────────────────┘
+
+  ┌────────────────────────────────────────────────────────┐
+  │ OPTION B: Création Manuelle (5 min)                   │
+  │                                                        │
+  │   1. ssh root@proxmox                                 │
+  │   2. cd /var/lib/vz/template/iso                      │
+  │   3. wget https://cloud-images.ubuntu.com/...         │
+  │   4. qm create 9000 --name ubuntu-22.04-template ...  │
+  │   5. qm template 9000                                 │
+  └────────────────────────────────────────────────────────┘
+
+
+  Étape 2: Configurer .env
+  ┌────────────────────────────────────────────────────────┐
+  │ Ajouter dans .env:                                     │
+  │                                                        │
+  │   TEMPLATE_NAME=9000                                  │
+  │   # ou                                                │
+  │   TEMPLATE_NAME=ubuntu-22.04-template                 │
+  └────────────────────────────────────────────────────────┘
+
+
+  Étape 3: Vérifier Connectivité
+  ┌────────────────────────────────────────────────────────┐
+  │ Tester l'accès réseau:                                │
+  │                                                        │
+  │   ping registry.terraform.io                          │
+  │   ping releases.hashicorp.com                         │
+  │                                                        │
+  │ Si derrière proxy:                                    │
+  │   export HTTP_PROXY=http://proxy:8080                 │
+  │   export HTTPS_PROXY=http://proxy:8080                │
+  └────────────────────────────────────────────────────────┘
+
+
+  Étape 4: Nettoyer et Redémarrer
+  ┌────────────────────────────────────────────────────────┐
+  │ rm -rf terraform/workspaces/*                         │
+  │ rm -rf terraform/states/*                             │
+  │ ./start.sh                                            │
+  └────────────────────────────────────────────────────────┘
+
+
+📊 CHECKLIST DE VÉRIFICATION
+══════════════════════════════════════════════════════════════
+
+  Avant de redémarrer, vérifiez:
+
+  ☐ Template Proxmox créé (ID ou nom noté)
+  ☐ Variable TEMPLATE_NAME configurée dans .env
+  ☐ Connectivité Internet vérifiée
+  ☐ Proxy configuré si nécessaire
+  ☐ Workspaces Terraform nettoyés
+  ☐ Application redémarrée
+
+
+🧪 TEST DE VALIDATION
+══════════════════════════════════════════════════════════════
+
+  Une fois configuré:
+
+  1. Vérifier le statut
+     curl http://localhost:5000/api/status
+
+  2. Tester un déploiement
+     curl -X POST http://localhost:5000/api/deploy \
+       -H "Content-Type: application/json" \
+       -d '{"type":"vm","framework":"flask",...}'
+
+  3. Surveiller les logs
+     tail -f logs/app.log
+
+
+📚 DOCUMENTATION DISPONIBLE
+══════════════════════════════════════════════════════════════
+
+  Guide de Résolution
+    QUICK_FIX.md ........... Solutions détaillées complètes
+    SOLUTIONS.md ........... Résumé rapide et checklist
+    ERROR_SUMMARY.md ....... Récapitulatif technique
+
+  Documentation Générale
+    README.md .............. Vue d'ensemble du projet
+    QUICKSTART.md .......... Démarrage rapide (5 min)
+    docs/INSTALLATION.md ... Installation complète
+    docs/TROUBLESHOOTING.md  Guide de dépannage
+
+
+💻 COMMANDES UTILES
+══════════════════════════════════════════════════════════════
+
+  make check-config ........ Vérifier la configuration
+  make install ............. Installer les dépendances
+  make start ............... Démarrer l'application
+  make status .............. Voir le statut
+  make logs ................ Afficher les logs
+  make clean ............... Nettoyer
+
+
+🎯 RÉSUMÉ RAPIDE
+══════════════════════════════════════════════════════════════
+
+  Problèmes détectés:        2 erreurs bloquantes
+  Solutions fournies:        4 guides + 2 scripts
+  Fichiers modifiés:         3
+  Temps de résolution:       5-10 minutes
+  Difficulté:                ⭐⭐ (Facile à Moyen)
+
+
+📞 BESOIN D'AIDE?
+══════════════════════════════════════════════════════════════
+
+  1. Consultez QUICK_FIX.md pour le guide complet
+  2. Exécutez ./check-proxmox-templates.sh
+  3. Vérifiez logs/app.log pour les détails
+  4. Lisez docs/TROUBLESHOOTING.md
+
+
+╔══════════════════════════════════════════════════════════════╗
+║                                                              ║
+║  ✅ TOUTES LES SOLUTIONS SONT PRÊTES ET DOCUMENTÉES         ║
+║                                                              ║
+║  🚀 Suivez les étapes ci-dessus pour résoudre les erreurs   ║
+║                                                              ║
+╚══════════════════════════════════════════════════════════════╝
+
+
+Dernière mise à jour: 7 Décembre 2025
